@@ -3,6 +3,8 @@ package lambdas.simpleStuff;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SimpleLambda {
@@ -22,18 +24,25 @@ public class SimpleLambda {
         Player myPlayer2 = new Player("Fiirtz", playerCards2);
         Player myPlayer3 = new Player("MR Poker", playerCards3);
         Player myPlayer4 = new Player("Carlson", playerCards4);
+        Player2 myPlayer5 = new Player2("Charlie", playerCards);
 
         List<Player> playerList = new ArrayList<>();
         playerList.add(myPlayer);
         playerList.add(myPlayer2);
         playerList.add(myPlayer3);
+        playerList.add(myPlayer4);
+        playerList.add(myPlayer5);
 
 
         // ~Lambda -> Returns the Players whose cards match any card of the dealer
         //---------------------------------------------------------------------------------
-        List<Player> playerFilterd = playerList.stream()
-                .filter(player -> player.getCards().stream().anyMatch(dealerCards::contains))
-                .collect(Collectors.toList());
+
+        Predicate<Player> getMatchingPlayer = player -> player.getCards().stream()
+                                                                         .anyMatch(dealerCards::contains);
+
+        List<Player> playerFilterd =  playerList.stream()
+                                                .filter(getMatchingPlayer)
+                                                .collect(Collectors.toList());
 
         if(playerFilterd.size() != 3) {
             throw new Exception("Failed, actual size: " + playerFilterd.size());
@@ -46,7 +55,7 @@ public class SimpleLambda {
 
     // ~ inner Class
     //-------------------------------------------------------------------------------------
-    static class Player {
+    public static class Player {
         String name;
         List<String> cards;
 
@@ -76,6 +85,13 @@ public class SimpleLambda {
             return "Player{" +
                     "name='" + name + '\'' +
                     '}';
+        }
+    }
+
+    static class Player2 extends Player {
+
+        public Player2(String name, List<String> cards) {
+            super(name, cards);
         }
     }
 }

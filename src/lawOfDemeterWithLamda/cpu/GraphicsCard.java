@@ -1,4 +1,4 @@
-package lawOfDemeterWithLamda;
+package lawOfDemeterWithLamda.cpu;
 
 public class GraphicsCard {
 
