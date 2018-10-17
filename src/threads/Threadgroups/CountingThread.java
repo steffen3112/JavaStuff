@@ -13,14 +13,8 @@ public class CountingThread extends Thread {
         while(counter.currentValue() <= counter.getLimit() && !Thread.currentThread().isInterrupted()) {
             System.out.println(counter.currentValue());
             counter.increment();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ThreadUtils.safeSleep(1000);
         }
-
-
     }
 
 }
