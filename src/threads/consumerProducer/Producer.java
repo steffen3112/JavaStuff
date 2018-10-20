@@ -26,6 +26,9 @@ public class Producer implements Runnable {
             synchronized (sharedItems) {
                 sharedItems.add(newItem);
                 System.out.println("Added" + newItem);
+
+                // Inform all waiting threads
+                sharedItems.notifyAll();
             }
 
             counter++;

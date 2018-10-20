@@ -8,33 +8,48 @@ public class Consumer implements Runnable {
 
     private final List<Item> sharedItems;
     private final long sleepTime;
+    private String consumerName;
 
-    public Consumer(List<Item> sharedItems, long sleepTime) {
+    public Consumer(List<Item> sharedItems, long sleepTime, String consumerName) {
         this.sharedItems = sharedItems;
         this.sleepTime = sleepTime;
+        this.consumerName = consumerName;
     }
 
     @Override
     public void run() {
 
         while (!Thread.currentThread().isInterrupted()) {
-            boolean noItems = true;
-            while(noItems) {
 
                 synchronized (sharedItems) {
-                    noItems = (sharedItems.size() == 0);
-                    if(noItems) {
-                        System.out.println("Waiting for Items");
-                    }
-                    else {
-                        System.out.println("Consuming Item " + sharedItems.remove(0));
+
+                    try {
+                        System.out.println(consumerName +" waiting...");
+
+                        waitForItemsAvailable();
+
+                        final Item item = sharedItems.remove(0);
+                        System.out.println(consumerName + "Removing Item " + item);
+
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                     }
 
                     ThreadUtils.safeSleep(sleepTime);
-                }
 
             }
         }
 
+    }
+
+    /*
+        Its better to refactor the "condition" into a private method
+        which ensures, that for multiple Threads none of them is getting
+        a invalid state or is doing an invalid action
+     */
+    private void waitForItemsAvailable() throws InterruptedException {
+        while(this.sharedItems.size() == 0) {
+            sharedItems.wait();
+        }
     }
 }
