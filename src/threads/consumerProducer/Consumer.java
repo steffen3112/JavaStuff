@@ -2,15 +2,15 @@ package threads.consumerProducer;
 
 import threads.Threadgroups.ThreadUtils;
 
-import java.util.List;
+import java.util.concurrent.BlockingDeque;
 
 public class Consumer implements Runnable {
 
-    private final List<Item> sharedItems;
+    private final BlockingDeque<Item> sharedItems;
     private final long sleepTime;
     private String consumerName;
 
-    public Consumer(List<Item> sharedItems, long sleepTime, String consumerName) {
+    public Consumer(BlockingDeque<Item> sharedItems, long sleepTime, String consumerName) {
         this.sharedItems = sharedItems;
         this.sleepTime = sleepTime;
         this.consumerName = consumerName;
@@ -28,7 +28,7 @@ public class Consumer implements Runnable {
 
                         waitForItemsAvailable();
 
-                        final Item item = sharedItems.remove(0);
+                        final Item item = sharedItems.takeFirst();
                         System.out.println(consumerName + "Removing Item " + item);
 
                     } catch (InterruptedException e) {

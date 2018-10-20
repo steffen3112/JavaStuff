@@ -1,14 +1,16 @@
 package threads.consumerProducer;
 
-import java.util.LinkedList;
-import java.util.List;
+import threads.Threadgroups.ThreadUtils;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 public class Client {
 
     public static void main(String[] args) throws InterruptedException {
 
-        final List<Item> sharedItems = new LinkedList<>();
+        final int MAX_QUEUE_SIZE = 8;
+        final BlockingDeque<Item> sharedItems = new LinkedBlockingDeque<>(MAX_QUEUE_SIZE);
 
         final Thread producer = new Thread(new Producer(sharedItems, 1000));
         final Thread consumer1 = new Thread(new Consumer(sharedItems, 1000, "Consumer #1"));
@@ -16,6 +18,9 @@ public class Client {
         final Thread consumer3 = new Thread(new Consumer(sharedItems, 2000, "Consumer #3"));
 
         producer.start();
+
+        ThreadUtils.safeSleep(TimeUnit.SECONDS, 5);
+
         consumer1.start();
         consumer2.start();
         consumer3.start();

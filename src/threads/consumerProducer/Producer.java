@@ -2,14 +2,14 @@ package threads.consumerProducer;
 
 import threads.Threadgroups.ThreadUtils;
 
-import java.util.List;
+import java.util.concurrent.BlockingDeque;
 
 public class Producer implements Runnable {
 
-    private final List<Item> sharedItems;
+    private final BlockingDeque<Item> sharedItems;
     private final long sleepTime;
 
-    public Producer(final List<Item> items, final long sleepTime) {
+    public Producer(final BlockingDeque<Item> items, final long sleepTime) {
         this.sharedItems = items;
         this.sleepTime = sleepTime;
     }
