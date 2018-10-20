@@ -16,7 +16,7 @@ public class Client {
     /**
      * Checks if in the both ArrayLists ({@code unsafeIntegers} and {@code syncIntegers}) duplicates
      * appear. Since {@code runUnsafeMode()} creates two threads and is not synchronized, it might happen that at
-     * one time both thread hold the same instance variable´s value.
+     * one time both thread hold the same instance variable´s value. zz too much um die Ohren,
      * Will not happen for the {@code runSynchronizedMode()} since it wraps the method call in a synchronized Object
      * @param args command Line arguments
      */
