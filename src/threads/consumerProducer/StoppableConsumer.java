@@ -1,16 +1,17 @@
 package threads.consumerProducer;
 
+import threads.AbstractStoppableRunnable;
 import threads.Threadgroups.ThreadUtils;
 
 import java.util.concurrent.BlockingDeque;
 
-public class Consumer implements Runnable {
+public class StoppableConsumer extends AbstractStoppableRunnable {
 
     private final BlockingDeque<Item> sharedItems;
     private final long sleepTime;
     private String consumerName;
 
-    public Consumer(BlockingDeque<Item> sharedItems, long sleepTime, String consumerName) {
+    public StoppableConsumer(BlockingDeque<Item> sharedItems, long sleepTime, String consumerName) {
         this.sharedItems = sharedItems;
         this.sleepTime = sleepTime;
         this.consumerName = consumerName;
@@ -20,7 +21,7 @@ public class Consumer implements Runnable {
     public void run() {
 
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!shouldStop()) {
 
             synchronized (sharedItems) {
 
@@ -37,7 +38,6 @@ public class Consumer implements Runnable {
                 }
 
                 ThreadUtils.safeSleep(sleepTime);
-                // throw new IllegalStateException();
 
             }
         }
@@ -54,4 +54,5 @@ public class Consumer implements Runnable {
             sharedItems.wait();
         }
     }
+
 }
