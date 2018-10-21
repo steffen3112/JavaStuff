@@ -19,23 +19,25 @@ public class Consumer implements Runnable {
     @Override
     public void run() {
 
+
         while (!Thread.currentThread().isInterrupted()) {
 
-                synchronized (sharedItems) {
+            synchronized (sharedItems) {
 
-                    try {
-                        System.out.println(consumerName +" waiting...");
+                try {
+                    System.out.println(consumerName +" waiting...");
 
-                        waitForItemsAvailable();
+                    waitForItemsAvailable();
 
-                        final Item item = sharedItems.takeFirst();
-                        System.out.println(consumerName + "Removing Item " + item);
+                    final Item item = sharedItems.takeFirst();
+                    System.out.println(consumerName + "Removing Item " + item);
 
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
 
-                    ThreadUtils.safeSleep(sleepTime);
+                ThreadUtils.safeSleep(sleepTime);
+                throw new IllegalStateException();
 
             }
         }

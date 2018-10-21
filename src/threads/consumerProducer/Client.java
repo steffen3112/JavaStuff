@@ -1,5 +1,6 @@
 package threads.consumerProducer;
 
+import threads.LoggingUncaughtExceptionHandler;
 import threads.Threadgroups.ThreadUtils;
 
 import java.util.concurrent.BlockingDeque;
@@ -12,6 +13,7 @@ public class Client {
 
         final int MAX_QUEUE_SIZE = 8;
         final BlockingDeque<Item> sharedItems = new LinkedBlockingDeque<>(MAX_QUEUE_SIZE);
+        LoggingUncaughtExceptionHandler loggingUncaughtExceptionHandler = new LoggingUncaughtExceptionHandler();
 
         final Thread producer = new Thread(new Producer(sharedItems, 1000));
         final Thread consumer1 = new Thread(new Consumer(sharedItems, 1000, "Consumer #1"));
@@ -21,6 +23,17 @@ public class Client {
         producer.start();
 
         ThreadUtils.safeSleep(TimeUnit.SECONDS, 5);
+
+        producer.setName("Producer");
+        consumer1.setName("Consumer #1");
+        consumer2.setName("Consumer #2");
+        consumer3.setName("Consumer #3");
+
+        producer.setUncaughtExceptionHandler(loggingUncaughtExceptionHandler);
+        consumer1.setUncaughtExceptionHandler(loggingUncaughtExceptionHandler);
+        consumer2.setUncaughtExceptionHandler(loggingUncaughtExceptionHandler);
+        consumer3.setUncaughtExceptionHandler(loggingUncaughtExceptionHandler);
+
 
         consumer1.start();
         consumer2.start();
