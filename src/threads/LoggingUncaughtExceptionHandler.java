@@ -1,5 +1,6 @@
 package threads;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.logging.FileHandler;
@@ -9,11 +10,13 @@ import java.util.logging.SimpleFormatter;
 public class LoggingUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     private static final Logger logger = Logger.getLogger("Uncaught Execptions");
-    FileHandler fileHandler;
+    private FileHandler fileHandler;
+    private File logFile;
 
     public LoggingUncaughtExceptionHandler() {
         try {
-            fileHandler = new FileHandler("/home/steffen/Repos/javastuff/JavaStuff/src/threads/ThreadLogFile.log");
+            logFile = new File( System.getProperty("user.dir") + "/JavaStuff/src/threads/threadExceptions.log");
+            fileHandler = new FileHandler(logFile.getAbsolutePath());
             logger.addHandler(fileHandler);
             SimpleFormatter simpleFormatter = new SimpleFormatter();
             fileHandler.setFormatter(simpleFormatter);
